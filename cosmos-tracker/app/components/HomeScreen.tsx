@@ -10,13 +10,13 @@ interface HomeProps {
 
 const HomeScreen = ({ title, src, description }: HomeProps) => {
   return (
-    <main className="flex min-h-screen flex-1 items-center justify-center bg-cosmos-frost px-4 py-12 text-cosmos-ink dark:bg-cosmos-night dark:text-white">
-      <section className="flex w-full max-w-[640px] flex-col gap-6 rounded-lg border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-cosmos-panel">
-        <div className="flex flex-col gap-3">
-          <p className="text-center text-xs font-bold uppercase tracking-[2px] text-cosmos-comet dark:text-cosmos-aurora">
+    <main className="cosmos-home">
+      <section className="cosmos-card">
+        <div className="cosmos-heading">
+          <p className="cosmos-kicker">
             Cosmos Tracker
           </p>
-          <h1 className="text-center text-3xl font-extrabold leading-tight text-cosmos-ink dark:text-white">
+          <h1 className="cosmos-title">
             {title}
           </h1>
         </div>
@@ -25,7 +25,7 @@ const HomeScreen = ({ title, src, description }: HomeProps) => {
           <InlineDatePicker date={date} setDate={setDate} darkTheme={isDark} />
         </div> */}
 
-        <div className="flex items-center justify-center">
+        <div className="cosmos-image-wrap">
           <Image
             src={src}
             height={1000}
@@ -33,17 +33,17 @@ const HomeScreen = ({ title, src, description }: HomeProps) => {
             alt={title}
             loading="eager"
             priority
-            className="h-auto max-h-[62vh] w-full rounded-md object-cover"
+            className="cosmos-image"
           />
         </div>
 
-        <div>
-          <p className="text-center text-base leading-6 text-slate-700 dark:text-slate-300">
+        <div className="cosmos-copy-wrap">
+          <p className="cosmos-copy">
             {description}
           </p>
         </div>
 
-        <div className="flex flex-row flex-wrap items-center justify-center gap-3">
+        <div className="cosmos-actions">
           {/* <Pressable
             accessibilityRole="button"
             onPress={() => {

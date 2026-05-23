@@ -77,6 +77,117 @@ body > * {
   width: 100%;
 }
 
+.cosmos-home {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  background: #f8fafc;
+  padding: 48px 16px;
+}
+
+[data-theme="dark"] .cosmos-home {
+  background: #050816;
+}
+
+.cosmos-card {
+  display: flex;
+  width: 100%;
+  max-width: 640px;
+  flex-direction: column;
+  gap: 24px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 24px;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+[data-theme="dark"] .cosmos-card {
+  border-color: #1e293b;
+  background: #111827;
+}
+
+.cosmos-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cosmos-kicker {
+  margin: 0;
+  color: #6366f1;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 16px;
+  letter-spacing: 2px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+[data-theme="dark"] .cosmos-kicker {
+  color: #2dd4bf;
+}
+
+.cosmos-title {
+  margin: 0;
+  color: #111827;
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 36px;
+  letter-spacing: 0;
+  text-align: center;
+}
+
+[data-theme="dark"] .cosmos-title {
+  color: #ffffff;
+}
+
+.cosmos-image-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.cosmos-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: fill;
+  border-radius: 0;
+}
+
+.cosmos-copy-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cosmos-copy {
+  margin: 0;
+  color: #334155;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0;
+  text-align: center;
+}
+
+[data-theme="dark"] .cosmos-copy {
+  color: #cbd5e1;
+}
+
+.cosmos-actions {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
 @media (prefers-color-scheme: dark) {
   body {
     background: #050816;
