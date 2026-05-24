@@ -1,4 +1,4 @@
-import HomeScreen from "./components/HomeScreen";
+import HomeScreen from "./screens/HomeScreen";
 
 export default async function Home() {
   let apod;
