@@ -1,6 +1,12 @@
 "use client";
 import Image from "next/image";
 import { Video } from "../components/Video";
+import DatePicker from "../components/DatePicker";
+import { useEffect, useState } from "react";
+import {
+  fetchImageForSelectedDate,
+  fetchISOStringDate,
+} from "../utilities/helper";
 
 interface HomeProps {
   title: string;
@@ -10,39 +16,69 @@ interface HomeProps {
 }
 
 const HomeScreen = ({ title, src, description, mediaType }: HomeProps) => {
+  const [date, setDate] = useState(new Date());
+  const [mediaDetails, setMediaDetails] = useState({
+    title,
+    src,
+    description,
+    mediaType,
+  });
+  const [loading, setLoading] = useState(false);
+  const updateImageForSelectedDate = async () => {
+    setLoading(true);
+    const apod = await fetchImageForSelectedDate(fetchISOStringDate(date));
+    if (apod) {
+      setMediaDetails({
+        title: apod?.data?.title,
+        src: apod?.data?.url,
+        description: apod?.data?.explanation,
+        mediaType: apod?.data?.media_type,
+      });
+    }
+  };
+  useEffect(() => {
+    updateImageForSelectedDate();
+    setLoading(false);
+  }, [date]);
+
   return (
     <main className="cosmos-home">
       <section className="cosmos-card">
         <div className="cosmos-heading">
           <p className="cosmos-kicker">Cosmos Tracker</p>
-          <h1 className="cosmos-title">{title}</h1>
+          <div className="gap-4 ">
+            <DatePicker date={date} setDate={setDate} darkTheme={true} />
+          </div>
         </div>
 
-        {/* <div className="gap-4 ">
-          <InlineDatePicker date={date} setDate={setDate} darkTheme={isDark} />
-        </div> */}
-
-        <div className="cosmos-image-wrap">
-          {mediaType === "image" && (
-            <Image
-              src={src}
-              height={1000}
-              width={1000}
-              alt={title}
-              loading="eager"
-              priority
-              className="cosmos-image"
-            />
-          )}
-          {mediaType === "video" && <Video src={src} />}
-        </div>
-
-        <div className="cosmos-copy-wrap">
-          <p className="cosmos-copy">{description}</p>
-        </div>
-
-        <div className="cosmos-actions">
-          {/* <Pressable
+        {loading ? (
+          <>Loading</>
+        ) : (
+          <>
+            <h1 className="cosmos-title">{mediaDetails?.title}</h1>
+            <div className="cosmos-image-wrap">
+              {mediaDetails?.mediaType === "image" && (
+                <Image
+                  src={mediaDetails?.src}
+                  height={1000}
+                  width={1000}
+                  alt={mediaDetails?.title}
+                  loading="eager"
+                  priority
+                  className="cosmos-image"
+                  placeholder="blur"
+                  blurDataURL="..."
+                />
+              )}
+              {mediaDetails?.mediaType === "video" && (
+                <Video src={mediaDetails?.src} />
+              )}
+            </div>
+            <div className="cosmos-copy-wrap">
+              <p className="cosmos-copy">{mediaDetails?.description}</p>
+            </div>
+            <div className="cosmos-actions">
+              {/* <Pressable
             accessibilityRole="button"
             onPress={() => {
               setColorScheme(isDark ? "light" : "dark");
@@ -55,7 +91,7 @@ const HomeScreen = ({ title, src, description, mediaType }: HomeProps) => {
             </p>
           </Pressable> */}
 
-          {/* <pLink
+              {/* <pLink
             href="/users/fernando"
             style={{
               fontSize: 16,
@@ -66,7 +102,9 @@ const HomeScreen = ({ title, src, description, mediaType }: HomeProps) => {
           >
             div user
             </pLink> */}
-        </div>
+            </div>
+          </>
+        )}
       </section>
     </main>
   );
