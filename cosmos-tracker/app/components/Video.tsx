@@ -1,4 +1,8 @@
-export function Video({ src }) {
+interface VideoProps {
+  src: string;
+}
+
+export function Video({ src }: VideoProps) {
   return (
     <video
       width="480"

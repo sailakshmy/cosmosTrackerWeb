@@ -7,6 +7,7 @@ import {
   fetchImageForSelectedDate,
   fetchISOStringDate,
 } from "../utilities/helper";
+import dynamic from "next/dynamic";
 
 interface HomeProps {
   title: string;
@@ -14,6 +15,11 @@ interface HomeProps {
   description: string;
   mediaType: string;
 }
+
+const DynamicThemeSwitcher = dynamic(
+  () => import("../components/ThemeSwitcher"),
+  { ssr: false },
+);
 
 const HomeScreen = ({ title, src, description, mediaType }: HomeProps) => {
   const [date, setDate] = useState(new Date());
@@ -23,22 +29,28 @@ const HomeScreen = ({ title, src, description, mediaType }: HomeProps) => {
     description,
     mediaType,
   });
-  const [loading, setLoading] = useState(false);
-  const updateImageForSelectedDate = async () => {
-    setLoading(true);
-    const apod = await fetchImageForSelectedDate(fetchISOStringDate(date));
-    if (apod) {
+  useEffect(() => {
+    let shouldUpdate = true;
+
+    const updateImageForSelectedDate = async () => {
+      const apod = await fetchImageForSelectedDate(fetchISOStringDate(date));
+      if (!shouldUpdate || !apod) {
+        return;
+      }
+
       setMediaDetails({
         title: apod?.data?.title,
         src: apod?.data?.url,
         description: apod?.data?.explanation,
         mediaType: apod?.data?.media_type,
       });
-    }
-  };
-  useEffect(() => {
+    };
+
     updateImageForSelectedDate();
-    setLoading(false);
+
+    return () => {
+      shouldUpdate = false;
+    };
   }, [date]);
 
   return (
@@ -47,64 +59,33 @@ const HomeScreen = ({ title, src, description, mediaType }: HomeProps) => {
         <div className="cosmos-heading">
           <p className="cosmos-kicker">Cosmos Tracker</p>
           <div className="gap-4 ">
-            <DatePicker date={date} setDate={setDate} darkTheme={true} />
+            <DatePicker date={date} setDate={setDate} />
           </div>
         </div>
 
-        {loading ? (
-          <>Loading</>
-        ) : (
-          <>
-            <h1 className="cosmos-title">{mediaDetails?.title}</h1>
-            <div className="cosmos-image-wrap">
-              {mediaDetails?.mediaType === "image" && (
-                <Image
-                  src={mediaDetails?.src}
-                  height={1000}
-                  width={1000}
-                  alt={mediaDetails?.title}
-                  loading="eager"
-                  priority
-                  className="cosmos-image"
-                  placeholder="blur"
-                  blurDataURL="..."
-                />
-              )}
-              {mediaDetails?.mediaType === "video" && (
-                <Video src={mediaDetails?.src} />
-              )}
-            </div>
-            <div className="cosmos-copy-wrap">
-              <p className="cosmos-copy">{mediaDetails?.description}</p>
-            </div>
-            <div className="cosmos-actions">
-              {/* <Pressable
-            accessibilityRole="button"
-            onPress={() => {
-              setColorScheme(isDark ? "light" : "dark");
-              setIsDark((prev) => !prev);
-            }}
-            className="rounded-md border border-slate-300 px-4 py-3 dark:border-slate-700"
-          >
-            <p className="font-bold p-cosmos-ink dark:p-white">
-              {isDark ? "Light mode" : "Dark mode"}
-            </p>
-          </Pressable> */}
-
-              {/* <pLink
-            href="/users/fernando"
-            style={{
-              fontSize: 16,
-              fontWeight: "bold",
-              color: isDark ? "#2dd4bf" : "#4f46e5",
-              padding: 12,
-            }}
-          >
-            div user
-            </pLink> */}
-            </div>
-          </>
-        )}
+        <h1 className="cosmos-title">{mediaDetails?.title}</h1>
+        <div className="cosmos-image-wrap">
+          {mediaDetails?.mediaType === "image" && (
+            <Image
+              src={mediaDetails?.src}
+              height={1000}
+              width={1000}
+              alt={mediaDetails?.title}
+              loading="eager"
+              priority
+              className="cosmos-image"
+              placeholder="blur"
+              blurDataURL="..."
+            />
+          )}
+          {mediaDetails?.mediaType === "video" && (
+            <Video src={mediaDetails?.src} />
+          )}
+        </div>
+        <div className="cosmos-copy-wrap">
+          <p className="cosmos-copy">{mediaDetails?.description}</p>
+        </div>
+        <DynamicThemeSwitcher />
       </section>
     </main>
   );
