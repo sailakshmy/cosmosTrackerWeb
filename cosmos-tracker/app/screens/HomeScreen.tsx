@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { Video } from "../components/Video";
 import DatePicker from "../components/DatePicker";
-import { useEffect, useState } from "react";
+import { Profiler, useEffect, useState } from "react";
 import {
   fetchImageForSelectedDate,
   fetchISOStringDate,
@@ -14,6 +14,7 @@ interface HomeProps {
   src: string;
   description: string;
   mediaType: string;
+  dateReceived?: string;
 }
 
 const DynamicThemeSwitcher = dynamic(
@@ -21,8 +22,21 @@ const DynamicThemeSwitcher = dynamic(
   { ssr: false },
 );
 
-const HomeScreen = ({ title, src, description, mediaType }: HomeProps) => {
-  const [date, setDate] = useState(new Date());
+const HomeScreen = ({
+  title,
+  src,
+  description,
+  mediaType,
+  dateReceived,
+}: HomeProps) => {
+  const dateHasBeenUpdated =
+    dateReceived !== undefined && dateReceived !== null;
+  const [date, setDate] = useState(
+    dateHasBeenUpdated ? new Date(dateReceived) : new Date(),
+  );
+  const [showDateChangeMessage, setShowDateChangeMessage] =
+    useState(dateHasBeenUpdated);
+  console.log("Date", date);
   const [mediaDetails, setMediaDetails] = useState({
     title,
     src,
@@ -44,6 +58,12 @@ const HomeScreen = ({ title, src, description, mediaType }: HomeProps) => {
         description: apod?.data?.explanation,
         mediaType: apod?.data?.media_type,
       });
+      if (apod?.data?.updatedDate) {
+        setDate(new Date(apod?.data?.updatedDate));
+        setShowDateChangeMessage(true);
+      } else {
+        setShowDateChangeMessage(false);
+      }
     };
 
     updateImageForSelectedDate();
@@ -58,9 +78,15 @@ const HomeScreen = ({ title, src, description, mediaType }: HomeProps) => {
       <section className="cosmos-card">
         <div className="cosmos-heading">
           <p className="cosmos-kicker">Cosmos Tracker</p>
-          <div className="gap-4 ">
+          <div className="gap-4">
             <DatePicker date={date} setDate={setDate} />
           </div>
+          {showDateChangeMessage && (
+            <p className="cosmos-kicker mt-2">
+              Today's picture is not yet available, so we are showing you
+              yesterday's picture.
+            </p>
+          )}
         </div>
 
         <h1 className="cosmos-title">{mediaDetails?.title}</h1>

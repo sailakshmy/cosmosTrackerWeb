@@ -16,13 +16,15 @@ export default async function Home() {
   } catch (e) {
     console.log("err", e);
   }
-  const { title, url, explanation, media_type } = apod?.data;
+  const { title, url, explanation, media_type, updatedDate } = apod?.data;
+  console.log("received date", updatedDate);
   return (
     <HomeScreen
       title={title}
       src={url}
       description={explanation}
       mediaType={media_type}
+      dateReceived={updatedDate}
     />
   );
 }
