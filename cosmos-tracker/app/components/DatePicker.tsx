@@ -1,9 +1,9 @@
-import { ChangeEvent, Dispatch, SetStateAction } from "react";
+import { ChangeEvent } from "react";
 import { fetchISOStringDate } from "../utilities/helper";
 
 interface DatePickerProps {
   date: Date;
-  setDate: Dispatch<SetStateAction<Date>>;
+  setDate: (selectedDate: Date) => void;
 }
 
 const DatePicker = ({ date, setDate }: DatePickerProps) => {
