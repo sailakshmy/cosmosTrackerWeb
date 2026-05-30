@@ -41,7 +41,8 @@ const HomeScreen = ({
   );
   const [showDateChangeMessage, setShowDateChangeMessage] =
     useState(dateHasBeenUpdated);
-  console.log("Date", date);
+  console.log("dateHasBeenUpdated", dateHasBeenUpdated);
+  console.log("showDateChangeMessage", showDateChangeMessage);
   const [mediaDetails, setMediaDetails] = useState({
     title,
     src,
@@ -50,11 +51,10 @@ const HomeScreen = ({
   });
 
   useEffect(() => {
-    let shouldUpdate = true;
-
+    console.log("date inside", date);
     const updateImageForSelectedDate = async () => {
       const apod = await fetchImageForSelectedDate(fetchISOStringDate(date));
-      if (!shouldUpdate || !apod) {
+      if (!apod) {
         setIsLoading(false);
         return;
       }
@@ -66,23 +66,20 @@ const HomeScreen = ({
         mediaType: apod?.data?.media_type,
       });
       if (apod?.data?.updatedDate) {
-        setDate(new Date(apod?.data?.updatedDate));
         setShowDateChangeMessage(true);
       } else {
+        console.log("I am being called");
         setShowDateChangeMessage(false);
       }
       setIsLoading(false);
     };
 
     updateImageForSelectedDate();
-
-    return () => {
-      shouldUpdate = false;
-    };
   }, [date]);
 
   const onDateChange = (selectedDate: Date) => {
     setIsLoading(true);
+    console.log("changed date");
     setDate(selectedDate);
   };
 
@@ -94,12 +91,6 @@ const HomeScreen = ({
           <div className="gap-4">
             <DatePicker date={date} setDate={onDateChange} />
           </div>
-          {showDateChangeMessage && (
-            <p className="cosmos-kicker mt-2">
-              Today&apos;s picture is not yet available, so we are showing you
-              yesterday&apos;s picture.
-            </p>
-          )}
         </div>
 
         {isLoading ? (
@@ -108,6 +99,12 @@ const HomeScreen = ({
           </div>
         ) : (
           <>
+            {showDateChangeMessage && (
+              <p className="cosmos-kicker mt-2">
+                Today&apos;s picture is not yet available, so we are showing you
+                yesterday&apos;s picture. Please try again later.
+              </p>
+            )}
             <h1 className="cosmos-title">{mediaDetails?.title}</h1>
             <div className="cosmos-image-wrap">
               {mediaDetails?.mediaType === "image" && (
