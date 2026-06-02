@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
-import { fetchImageForSelectedDate, fetchISOStringDate } from "../helper";
+import {
+  fetchImageForSelectedDate,
+  fetchISOStringDate,
+} from "../../utilities/helper";
 
 const useApodHook = (
   title: string,

@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Video } from "../components/Video";
 import DatePicker from "../components/DatePicker";
 import dynamic from "next/dynamic";
-import useApodHook from "../utilities/hooks/useApodHook";
+import useApodHook from "./hooks/useApodHook";
 
 interface HomeProps {
   title: string;
