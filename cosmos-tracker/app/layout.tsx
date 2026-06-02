@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import Error from "./global-error";
+import ReactQueryProvider from "./ReactQueryProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,7 +32,9 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <ErrorBoundary errorComponent={Error}>{children}</ErrorBoundary>
+        <ReactQueryProvider>
+          <ErrorBoundary errorComponent={Error}>{children}</ErrorBoundary>
+        </ReactQueryProvider>
       </body>
     </html>
   );

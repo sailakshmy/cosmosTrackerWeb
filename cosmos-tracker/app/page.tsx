@@ -1,3 +1,4 @@
+import Error from "./global-error";
 import HomeScreen from "./screens/HomeScreen";
 import {
   fetchImageForSelectedDate,
@@ -16,6 +17,8 @@ export default async function Home() {
   } catch (e) {
     console.log("err", e);
   }
+
+  if (!apod?.data) return <>{Error}</>;
   const { title, url, explanation, media_type, msg } = apod?.data;
   let updatedDate;
   if (!title && msg.includes("No data available for date")) {

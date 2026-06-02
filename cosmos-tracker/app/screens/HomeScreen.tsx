@@ -29,8 +29,14 @@ const HomeScreen = ({
   mediaType,
   dateReceived,
 }: HomeProps) => {
-  const { isLoading, date, onDateChange, mediaDetails, showDateChangeMessage } =
-    useApodHook(title, src, description, mediaType, dateReceived);
+  const {
+    isLoading,
+    date,
+    onDateChange,
+    mediaDetails,
+    showDateChangeMessage,
+    isFetching,
+  } = useApodHook(title, src, description, mediaType, dateReceived);
   return (
     <main className="cosmos-home">
       <section className="cosmos-card">
@@ -41,7 +47,7 @@ const HomeScreen = ({
           </div>
         </div>
 
-        {isLoading ? (
+        {isLoading || isFetching ? (
           <div className="cosmos-image-wrap">
             <ImageSkeleton />
           </div>
