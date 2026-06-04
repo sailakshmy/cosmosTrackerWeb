@@ -18,21 +18,22 @@ export default async function Home() {
     console.log("err", e);
   }
 
-  if (!apod?.data) return <>{Error}</>;
-  const { title, url, explanation, media_type, msg } = apod?.data;
-  let updatedDate;
-  if (!title && msg.includes("No data available for date")) {
-    const previousDate = new Date();
-    previousDate?.setDate(previousDate?.getDate() - 1);
-    updatedDate = fetchISOStringDate(previousDate);
+  if (apod?.data) {
+    const { title, url, explanation, media_type, msg } = apod?.data;
+    let updatedDate;
+    if (!title && msg.includes("No data available for date")) {
+      const previousDate = new Date();
+      previousDate?.setDate(previousDate?.getDate() - 1);
+      updatedDate = fetchISOStringDate(previousDate);
+    }
+    return (
+      <HomeScreen
+        title={title}
+        src={url}
+        description={explanation}
+        mediaType={media_type}
+        dateReceived={updatedDate}
+      />
+    );
   }
-  return (
-    <HomeScreen
-      title={title}
-      src={url}
-      description={explanation}
-      mediaType={media_type}
-      dateReceived={updatedDate}
-    />
-  );
 }
