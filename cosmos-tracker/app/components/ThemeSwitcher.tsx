@@ -6,7 +6,7 @@ type Theme = "light" | "dark";
 
 const getPreferredTheme = (): Theme => {
   if (typeof window === "undefined") {
-    return "light";
+    return "dark";
   }
 
   const storedTheme = window.localStorage.getItem("preferredTheme");
