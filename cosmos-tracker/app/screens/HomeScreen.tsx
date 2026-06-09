@@ -2,7 +2,6 @@
 import Image from "next/image";
 import { Video } from "../components/Video";
 import DatePicker from "../components/DatePicker";
-import dynamic from "next/dynamic";
 import useApodHook from "./hooks/useApodHook";
 
 interface HomeProps {
@@ -12,11 +11,6 @@ interface HomeProps {
   mediaType: string;
   dateReceived?: string;
 }
-
-const DynamicThemeSwitcher = dynamic(
-  () => import("../components/ThemeSwitcher"),
-  { ssr: false },
-);
 
 const ImageSkeleton = () => (
   <div className="cosmos-image-skeleton" aria-hidden="true" />
@@ -83,7 +77,6 @@ const HomeScreen = ({
             </div>
           </>
         )}
-        <DynamicThemeSwitcher />
       </section>
     </main>
   );
