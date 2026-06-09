@@ -5,6 +5,7 @@ import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import Error from "./global-error";
 import ReactQueryProvider from "./ReactQueryProvider";
 import SpaceBackground from "./components/SpaceBackground";
+import NavBar from "./components/NavBar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,6 +37,7 @@ export default function RootLayout({
         <SpaceBackground />
         <div className="cosmos-app-shell">
           <ReactQueryProvider>
+            <NavBar />
             <ErrorBoundary errorComponent={Error}>{children}</ErrorBoundary>
           </ReactQueryProvider>
         </div>
