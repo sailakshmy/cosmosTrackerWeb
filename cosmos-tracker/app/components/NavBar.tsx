@@ -30,6 +30,33 @@ const NavBar = () => {
   return (
     <nav className="cosmos-navbar" aria-label="Primary navigation">
       <div className="cosmos-navbar-inner">
+        <button
+          type="button"
+          className="cosmos-navbar-toggle"
+          aria-controls="cosmos-navbar-menu"
+          aria-expanded={isMenuOpen}
+          aria-label="Toggle navigation menu"
+          onClick={toggleMenu}
+        >
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+          >
+            <path
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2.2"
+              d={
+                isMenuOpen ? "M6 6l12 12M18 6L6 18" : "M4 7h16M4 12h16M4 17h16"
+              }
+            />
+          </svg>
+        </button>
         <Link
           href="/"
           className="cosmos-navbar-brand"
@@ -39,36 +66,6 @@ const NavBar = () => {
           <span>Cosmos Tracker</span>
         </Link>
         <div className="flex">
-          <button
-            type="button"
-            className="cosmos-navbar-toggle"
-            aria-controls="cosmos-navbar-menu"
-            aria-expanded={isMenuOpen}
-            aria-label="Toggle navigation menu"
-            onClick={toggleMenu}
-          >
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2.2"
-                d={
-                  isMenuOpen
-                    ? "M6 6l12 12M18 6L6 18"
-                    : "M4 7h16M4 12h16M4 17h16"
-                }
-              />
-            </svg>
-          </button>
-
           <div
             className={`cosmos-navbar-menu ${isMenuOpen ? "is-open" : ""}`}
             id="cosmos-navbar-menu"

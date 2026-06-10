@@ -35,7 +35,7 @@ const HomeScreen = ({
     <main className="cosmos-home">
       <section className="cosmos-card">
         <div className="cosmos-heading">
-          <p className="cosmos-kicker">Cosmos Tracker</p>
+          <p className="cosmos-kicker">Astronomy Picture of the Day</p>
           <div className="gap-4">
             <DatePicker date={date} setDate={onDateChange} />
           </div>
