@@ -1,5 +1,7 @@
+import NeoScreen from "../screens/NeoScreen";
+
 const NeoPage = () => {
-  return <div>NeoPage</div>;
+  return <NeoScreen />;
 };
 
 export default NeoPage;

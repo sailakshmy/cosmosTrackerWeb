@@ -13,3 +13,5 @@ export const fetchImageForSelectedDate = async (
   const apod = await apodData.json();
   return apod;
 };
+
+export const fetchNeoFeedData = () => {};
