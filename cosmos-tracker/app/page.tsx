@@ -1,4 +1,3 @@
-import Error from "./global-error";
 import HomeScreen from "./screens/HomeScreen";
 import {
   fetchImageForSelectedDate,
