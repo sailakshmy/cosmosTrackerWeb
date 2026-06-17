@@ -14,4 +14,16 @@ export const fetchImageForSelectedDate = async (
   return apod;
 };
 
-export const fetchNeoFeedData = () => {};
+export const fetchNeoFeedData = async (
+  startDate: string,
+  endDate: string,
+  signal?: AbortSignal,
+) => {
+  const neoFeedData = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/neo?startDate=${startDate}&endDate=${endDate}`,
+    { signal },
+  );
+  const neoFeed = await neoFeedData?.json();
+  console.log("neoFeed", neoFeed);
+  return neoFeed;
+};

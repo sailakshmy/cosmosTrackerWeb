@@ -4,7 +4,12 @@ import Card from "../components/Card";
 import DatePicker from "../components/DatePicker";
 import { addDays, toDate } from "date-fns";
 
-const NeoScreen = ({}) => {
+interface NeoScreenProps {
+  totalNeos: number;
+  hazardousNeos: number;
+}
+
+const NeoScreen = ({ totalNeos, hazardousNeos }: NeoScreenProps) => {
   const [startDate, setStartDate] = useState(new Date());
   const maxEndDate = new Date();
   maxEndDate.setDate(startDate.getDate() + 7);
@@ -50,15 +55,17 @@ const NeoScreen = ({}) => {
         </div>
         <div className="flex gap-4">
           <Card
-            title="Near Earth Objects"
-            subtitle="Track close approaches and orbital neighbors"
-            description="Explore asteroid and comet activity near Earth with a compact card designed to match the Cosmos Tracker light and dark themes."
+            title={`${totalNeos}`}
+            subtitle="A total of"
+            description="Came close to Earth in this selected date range"
           />
-          <Card
-            title="Near Earth Objects 2"
-            subtitle="Track close approaches and orbital neighbors"
-            description="Explore asteroid and comet activity near Earth with a compact card designed to match the Cosmos Tracker light and dark themes."
-          />
+          {hazardousNeos > 0 && (
+            <Card
+              title={`${hazardousNeos}`}
+              subtitle={`Out of ${totalNeos}`}
+              description={`${hazardousNeos > 1 ? "were" : "was"} potentially hazardous to us`}
+            />
+          )}
           <Card
             title="Near Earth Objects 2"
             subtitle="Track close approaches and orbital neighbors"
