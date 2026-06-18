@@ -568,7 +568,7 @@ body > * {
 }
 
 .cosmos-date-picker {
-  width: 95%;
+  width: 100%;
   min-height: 44px;
   border: 1px solid #cbd5e1;
   border-radius: 10px;

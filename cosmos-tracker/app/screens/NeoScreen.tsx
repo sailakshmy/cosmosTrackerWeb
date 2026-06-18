@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Card from "../components/Card";
 import DatePicker from "../components/DatePicker";
 import { addDays, toDate } from "date-fns";
@@ -48,13 +48,15 @@ const NeoScreen = ({
     // result = addDays(new Date(selectedDate), 0);
   };
   return (
-    <main className="cosmos-home">
-      <section className="cosmos-card">
-        <div className="cosmos-heading">
+    <main className="relative flex min-h-[calc(100vh-64px)] w-full flex-1 items-start justify-center overflow-x-hidden bg-cosmos-night px-4 py-6 sm:px-6 lg:min-h-[calc(100vh-72px)] lg:px-8 lg:py-10">
+      <section className="relative z-10 flex w-full max-w-6xl flex-col gap-6 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:gap-8 sm:rounded-2xl sm:p-6 lg:p-8 dark:border-slate-800 dark:bg-cosmos-panel">
+        <div className="flex flex-col gap-4">
           <p className="cosmos-kicker">Objects Near Our Big Blue</p>
-          <div className="gap-4 flex">
+          <div className="flex w-full flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-center sm:gap-4">
             <DatePicker date={startDate} setDate={onStartDateChange} />
-            -
+            <span className="hidden text-center text-slate-500 sm:block dark:text-slate-400">
+              -
+            </span>
             <DatePicker
               date={endDate}
               setDate={onEndDateChange}
@@ -62,7 +64,7 @@ const NeoScreen = ({
             />
           </div>
         </div>
-        <div className="flex gap-4">
+        <div className="grid min-w-0 grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
           <Card
             title={`${totalNeos}`}
             subtitle="A total of"
