@@ -3,13 +3,22 @@ import { useEffect, useState } from "react";
 import Card from "../components/Card";
 import DatePicker from "../components/DatePicker";
 import { addDays, toDate } from "date-fns";
+import { NearEarthObject } from "../utilities/types";
+import { convertEpochDateToMonthDateYearFormat } from "../utilities/helper";
 
 interface NeoScreenProps {
   totalNeos: number;
   hazardousNeos: number;
+  objectClosestToEarth: NearEarthObject;
+  highestVelocityObject: NearEarthObject;
 }
 
-const NeoScreen = ({ totalNeos, hazardousNeos }: NeoScreenProps) => {
+const NeoScreen = ({
+  totalNeos,
+  hazardousNeos,
+  objectClosestToEarth,
+  highestVelocityObject,
+}: NeoScreenProps) => {
   const [startDate, setStartDate] = useState(new Date());
   const maxEndDate = new Date();
   maxEndDate.setDate(startDate.getDate() + 7);
@@ -57,7 +66,7 @@ const NeoScreen = ({ totalNeos, hazardousNeos }: NeoScreenProps) => {
           <Card
             title={`${totalNeos}`}
             subtitle="A total of"
-            description="Came close to Earth in this selected date range"
+            description="Objects came close to Earth during this period"
           />
           {hazardousNeos > 0 && (
             <Card
@@ -67,9 +76,18 @@ const NeoScreen = ({ totalNeos, hazardousNeos }: NeoScreenProps) => {
             />
           )}
           <Card
-            title="Near Earth Objects 2"
-            subtitle="Track close approaches and orbital neighbors"
-            description="Explore asteroid and comet activity near Earth with a compact card designed to match the Cosmos Tracker light and dark themes."
+            title={`${objectClosestToEarth?.name}  on ${convertEpochDateToMonthDateYearFormat(objectClosestToEarth?.epoch_date_close_approach)}`}
+            subtitle="The object that was closest to us during this period was the"
+            description={`at a distance of ${
+              objectClosestToEarth?.miss_distance?.kilometers
+            } km (${objectClosestToEarth?.miss_distance?.miles} miles)`}
+          />
+          <Card
+            title={`${highestVelocityObject?.name}`}
+            subtitle="The object with the highest velocity during this period"
+            description={`at a velocity of ${
+              highestVelocityObject?.relative_velocity?.kilometers_per_hour
+            } kmph (${highestVelocityObject?.relative_velocity?.miles_per_hour} mph)`}
           />
         </div>
       </section>

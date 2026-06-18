@@ -27,3 +27,11 @@ export const fetchNeoFeedData = async (
   console.log("neoFeed", neoFeed);
   return neoFeed;
 };
+
+export const convertEpochDateToMonthDateYearFormat = (
+  epochDate: EpochTimeStamp,
+) => {
+  return new Date(epochDate)?.toUTCString();
+  // console.log(`"date", ${date?.toDateString()}, ${date?.toUTCString()}`);
+  // return date;
+};
