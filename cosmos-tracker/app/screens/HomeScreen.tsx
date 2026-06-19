@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Video } from "../components/Video";
 import DatePicker from "../components/DatePicker";
 import useApodHook from "./hooks/useApodHook";
+import ImageSkeleton from "../components/ImageSkeleton";
 
 interface HomeProps {
   title: string;
@@ -11,10 +12,6 @@ interface HomeProps {
   mediaType: string;
   dateReceived?: string;
 }
-
-const ImageSkeleton = () => (
-  <div className="cosmos-image-skeleton" aria-hidden="true" />
-);
 
 const HomeScreen = ({
   title,

@@ -1,3 +1,4 @@
+import ImageSkeleton from "./components/ImageSkeleton";
 import HomeScreen from "./screens/HomeScreen";
 import {
   fetchImageForSelectedDate,
@@ -8,7 +9,13 @@ export default async function Home() {
   let apod;
   try {
     const date = fetchISOStringDate(new Date());
-    console.log("process.env.BASE_URL", process.env.NEXT_PUBLIC_BASE_URL);
+    // console.log(
+    //   "Apod date",
+    //   new Date()?.toLocaleDateString(),
+    //   new Date()?.getUTCDate(),
+    //   new Date(date)?.getUTCDate(),
+    // );
+    // console.log("process.env.BASE_URL", process.env.NEXT_PUBLIC_BASE_URL);
     // const apodData = await fetch(`${process.env.BASE_URL}?date=${date}`);
     // apod = await apodData.json();
     apod = await fetchImageForSelectedDate(date, true);
@@ -34,5 +41,8 @@ export default async function Home() {
         dateReceived={updatedDate}
       />
     );
+  }
+  if (!apod) {
+    return <ImageSkeleton />;
   }
 }
