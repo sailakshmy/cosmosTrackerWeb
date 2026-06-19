@@ -14,11 +14,11 @@ const Card = ({ title, subtitle, description, className = "" }: CardProps) => {
         <p className="m-0 text-base font-semibold leading-6 text-cosmos-comet dark:text-cosmos-aurora">
           {subtitle}
         </p>
-        <h2 className="m-0 max-w-full break-words text-xl font-bold leading-7 text-cosmos-ink [overflow-wrap:anywhere] sm:text-2xl sm:leading-8 dark:text-cosmos-frost">
+        <h2 className="m-0 max-w-full text-xl font-bold leading-7 text-cosmos-ink wrap-anywhere sm:text-2xl sm:leading-8 dark:text-cosmos-frost">
           {title}
         </h2>
 
-        <p className="m-0 max-w-full break-words text-sm font-normal leading-6 text-slate-700 [overflow-wrap:anywhere] sm:text-base sm:leading-7 dark:text-slate-300">
+        <p className="m-0 max-w-full text-sm font-normal leading-6 text-slate-700 wrap-anywhere sm:text-base sm:leading-7 dark:text-slate-300">
           {description}
         </p>
       </div>

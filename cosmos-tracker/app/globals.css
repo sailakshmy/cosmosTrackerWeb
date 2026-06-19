@@ -653,6 +653,70 @@ body > * {
   background: #0f172a;
 }
 
+.cosmos-card-skeleton {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  min-height: 210px;
+  min-width: 0;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #ffffff;
+  padding: 16px;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+[data-theme="dark"] .cosmos-card-skeleton {
+  border-color: #1e293b;
+  background: #111827;
+}
+
+.cosmos-card-skeleton-content {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.cosmos-card-skeleton-line {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e2e8f0;
+}
+
+[data-theme="dark"] .cosmos-card-skeleton-line {
+  background: #0f172a;
+}
+
+.cosmos-card-skeleton-subtitle {
+  width: min(58%, 150px);
+  height: 18px;
+}
+
+.cosmos-card-skeleton-title {
+  width: min(76%, 220px);
+  height: 30px;
+}
+
+.cosmos-card-skeleton-copy {
+  width: min(88%, 260px);
+  height: 16px;
+}
+
+.cosmos-card-skeleton-copy-short {
+  width: min(62%, 180px);
+  height: 16px;
+}
+
 .cosmos-image-skeleton::after {
   position: absolute;
   inset: 0;
@@ -671,6 +735,36 @@ body > * {
 }
 
 [data-theme="dark"] .cosmos-image-skeleton::after {
+  background: linear-gradient(
+    110deg,
+    transparent 0%,
+    transparent 34%,
+    rgba(45, 212, 191, 0.08) 44%,
+    rgba(148, 163, 184, 0.28) 52%,
+    rgba(99, 102, 241, 0.08) 60%,
+    transparent 72%,
+    transparent 100%
+  );
+}
+
+.cosmos-card-skeleton-line::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background: linear-gradient(
+    110deg,
+    transparent 0%,
+    transparent 34%,
+    rgba(255, 255, 255, 0.85) 48%,
+    rgba(255, 255, 255, 0.55) 54%,
+    transparent 68%,
+    transparent 100%
+  );
+  transform: translateX(-100%);
+  animation: cosmos-skeleton-shimmer 1.25s ease-in-out infinite;
+}
+
+[data-theme="dark"] .cosmos-card-skeleton-line::after {
   background: linear-gradient(
     110deg,
     transparent 0%,
@@ -736,8 +830,16 @@ body > * {
 @media (prefers-reduced-motion: reduce) {
   .cosmos-home::before,
   .cosmos-home::after,
-  .cosmos-image-skeleton::after {
+  .cosmos-image-skeleton::after,
+  .cosmos-card-skeleton-line::after {
     animation: none;
+  }
+}
+
+@media (min-width: 640px) {
+  .cosmos-card-skeleton {
+    border-radius: 16px;
+    padding: 24px;
   }
 }
 
