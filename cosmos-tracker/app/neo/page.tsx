@@ -1,5 +1,4 @@
 import { addDays } from "date-fns";
-import "temporal-polyfill/global";
 import NeoScreen from "../screens/NeoScreen";
 import { fetchISOStringDate, fetchNeoFeedData } from "../utilities/helper";
 
