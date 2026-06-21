@@ -20,6 +20,12 @@ const NeoScreen = ({
   objectClosestToEarth,
   highestVelocityObject,
 }: NeoScreenProps) => {
+  const [neoFeedData, setNeoFeedData] = useState({
+    totalNeo: totalNeos,
+    hazardousNeo: hazardousNeos,
+    objClosestToEarth: objectClosestToEarth,
+    highestVelocityObj: highestVelocityObject,
+  });
   const [startDate, setStartDate] = useState(new Date());
 
   const rangeEndDate = addDays(new Date(startDate), 7);
@@ -58,31 +64,36 @@ const NeoScreen = ({
         </div>
         <div className="grid min-w-0 grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
           <Card
-            title={`${totalNeos}`}
+            title={`${neoFeedData?.totalNeo}`}
             subtitle="A total of"
             description="Objects came close to Earth during this period"
           />
-          {hazardousNeos > 0 && (
+          {neoFeedData?.hazardousNeo > 0 && (
             <Card
-              title={`${hazardousNeos}`}
-              subtitle={`Out of ${totalNeos}`}
-              description={`${hazardousNeos > 1 ? "were" : "was"} potentially hazardous to us`}
+              title={`${neoFeedData?.hazardousNeo}`}
+              subtitle={`Out of ${neoFeedData?.totalNeo}`}
+              description={`${neoFeedData?.hazardousNeo > 1 ? "were" : "was"} potentially hazardous to us`}
             />
           )}
-          <Card
-            title={`${objectClosestToEarth?.name}  on ${convertEpochDateToMonthDateYearFormat(objectClosestToEarth?.epoch_date_close_approach)}`}
-            subtitle="The object that was closest to us during this period was the"
-            description={`at a distance of ${
-              objectClosestToEarth?.miss_distance?.kilometers
-            } km (${objectClosestToEarth?.miss_distance?.miles} miles)`}
-          />
-          <Card
-            title={`${highestVelocityObject?.name}`}
-            subtitle="The object with the highest velocity during this period"
-            description={`at a velocity of ${
-              highestVelocityObject?.relative_velocity?.kilometers_per_hour
-            } kmph (${highestVelocityObject?.relative_velocity?.miles_per_hour} mph)`}
-          />
+          {neoFeedData?.objClosestToEarth && (
+            <Card
+              title={`${neoFeedData?.objClosestToEarth?.name}  on ${convertEpochDateToMonthDateYearFormat(neoFeedData?.objClosestToEarth?.epoch_date_close_approach)}`}
+              subtitle="The object that was closest to us during this period was the"
+              description={`at a distance of ${
+                neoFeedData?.objClosestToEarth?.miss_distance?.kilometers
+              } km (${neoFeedData?.objClosestToEarth?.miss_distance?.miles} miles)`}
+            />
+          )}
+          {neoFeedData?.highestVelocityObj && (
+            <Card
+              title={`${neoFeedData?.highestVelocityObj?.name}`}
+              subtitle="The object with the highest velocity during this period"
+              description={`at a velocity of ${
+                neoFeedData?.highestVelocityObj?.relative_velocity
+                  ?.kilometers_per_hour
+              } kmph (${neoFeedData?.highestVelocityObj?.relative_velocity?.miles_per_hour} mph)`}
+            />
+          )}
         </div>
       </section>
     </main>
