@@ -20,10 +20,11 @@ const NeoScreen = ({
   highestVelocityObject,
 }: NeoScreenProps) => {
   const [startDate, setStartDate] = useState(new Date());
-  const maxEndDate = new Date();
-  maxEndDate.setDate(startDate.getDate() + 7);
-  const result = addDays(new Date(startDate), 7);
-  const [endDate, setEndDate] = useState(toDate(result));
+
+  const rangeEndDate = addDays(new Date(startDate), 7);
+  // console.log("maxEndDate", maxEndDate);
+  console.log("rangeEndDate", rangeEndDate);
+  const [endDate, setEndDate] = useState(toDate(rangeEndDate));
 
   const onDateRangeChange = (selectedDate: Date, selectedEndDate: Date) => {
     setStartDate(selectedDate);
@@ -40,7 +41,7 @@ const NeoScreen = ({
               startDate={startDate}
               endDate={endDate}
               onChangeDateRange={onDateRangeChange}
-              maximumEndDate={maxEndDate}
+              maximumEndDate={rangeEndDate}
             />
           </div>
         </div>
