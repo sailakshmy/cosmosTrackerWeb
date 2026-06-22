@@ -1,11 +1,17 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import Card from "../components/Card";
-import { addDays, toDate } from "date-fns";
+import { addDays } from "date-fns";
 import { NearEarthObject } from "../utilities/types";
-import { convertEpochDateToMonthDateYearFormat } from "../utilities/helper";
+import {
+  convertEpochDateToMonthDateYearFormat,
+  fetchISOStringDate,
+  fetchNeoFeedData,
+} from "../utilities/helper";
 import DateRangePickerComponent from "../components/DateRangePicker";
 import Tooltip from "../components/Tooltip";
+import { useQuery } from "@tanstack/react-query";
+import CardSkeleton from "../components/CardSkeleton";
 
 interface NeoScreenProps {
   totalNeos: number;
@@ -26,22 +32,48 @@ const NeoScreen = ({
     objClosestToEarth: objectClosestToEarth,
     highestVelocityObj: highestVelocityObject,
   });
-  const [startDate, setStartDate] = useState(new Date());
 
-  const rangeEndDate = addDays(new Date(startDate), 7);
-  // console.log("maxEndDate", maxEndDate);
-  console.log("rangeEndDate", rangeEndDate);
-  const [endDate, setEndDate] = useState(toDate(rangeEndDate));
+  const [startDate, setStartDate] = useState(() => new Date());
+  const [endDate, setEndDate] = useState(() => addDays(new Date(), 7));
   const [endDateGreaterThanExpectedRange, setEndDateGreaterThanExpectedRange] =
     useState(false);
+
+  const rangeEndDate = useMemo(() => addDays(startDate, 7), [startDate]);
 
   const onDateRangeChange = (selectedDate: Date, selectedEndDate: Date) => {
     setStartDate(selectedDate);
     setEndDate(selectedEndDate);
-    if (selectedEndDate > addDays(new Date(selectedDate), 7)) {
-      setEndDateGreaterThanExpectedRange(true);
-    } else setEndDateGreaterThanExpectedRange(false);
+    setEndDateGreaterThanExpectedRange(
+      selectedEndDate > addDays(selectedDate, 7),
+    );
   };
+
+  const fetchDataForSelectedDateRange = async (signal: AbortSignal) => {
+    const selStartDate = fetchISOStringDate(startDate);
+    const selEndDate = fetchISOStringDate(addDays(startDate, 7));
+    console.log("SelStartDate", selStartDate);
+    console.log("selEndDate", selEndDate);
+    const updatedNeoFeedDate = await fetchNeoFeedData(
+      selStartDate,
+      selEndDate,
+      signal,
+    );
+    setNeoFeedData({
+      totalNeo: updatedNeoFeedDate?.totalNeos,
+      hazardousNeo: updatedNeoFeedDate?.hazardousNeos,
+      objClosestToEarth: updatedNeoFeedDate?.objectClosestToEarth,
+      highestVelocityObj: updatedNeoFeedDate?.highestVelocityObject,
+    });
+    return updatedNeoFeedDate;
+  };
+
+  const { isLoading, isFetching } = useQuery({
+    // ✅ Stable string keys — Date objects are always new references
+    queryKey: [startDate.toISOString(), endDate.toISOString()],
+    queryFn: ({ signal }) => fetchDataForSelectedDateRange(signal),
+    retry: 3,
+    retryDelay: 100,
+  });
 
   return (
     <main className="relative flex min-h-[calc(100vh-64px)] w-full flex-1 items-start justify-center overflow-x-hidden bg-cosmos-night px-4 py-6 sm:px-6 lg:min-h-[calc(100vh-72px)] lg:px-8 lg:py-10">
@@ -62,39 +94,43 @@ const NeoScreen = ({
             )}
           </div>
         </div>
-        <div className="grid min-w-0 grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          <Card
-            title={`${neoFeedData?.totalNeo}`}
-            subtitle="A total of"
-            description="Objects came close to Earth during this period"
-          />
-          {neoFeedData?.hazardousNeo > 0 && (
+
+        {isLoading || isFetching ? (
+          <div className="grid min-w-0 grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            {[1, 2, 3, 4]?.map((item) => (
+              <CardSkeleton key={item} />
+            ))}
+          </div>
+        ) : (
+          <div className="grid min-w-0 grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
             <Card
-              title={`${neoFeedData?.hazardousNeo}`}
-              subtitle={`Out of ${neoFeedData?.totalNeo}`}
-              description={`${neoFeedData?.hazardousNeo > 1 ? "were" : "was"} potentially hazardous to us`}
+              title={`${neoFeedData?.totalNeo}`}
+              subtitle="A total of"
+              description="Objects came close to Earth during this period"
             />
-          )}
-          {neoFeedData?.objClosestToEarth && (
-            <Card
-              title={`${neoFeedData?.objClosestToEarth?.name}  on ${convertEpochDateToMonthDateYearFormat(neoFeedData?.objClosestToEarth?.epoch_date_close_approach)}`}
-              subtitle="The object that was closest to us during this period was the"
-              description={`at a distance of ${
-                neoFeedData?.objClosestToEarth?.miss_distance?.kilometers
-              } km (${neoFeedData?.objClosestToEarth?.miss_distance?.miles} miles)`}
-            />
-          )}
-          {neoFeedData?.highestVelocityObj && (
-            <Card
-              title={`${neoFeedData?.highestVelocityObj?.name}`}
-              subtitle="The object with the highest velocity during this period"
-              description={`at a velocity of ${
-                neoFeedData?.highestVelocityObj?.relative_velocity
-                  ?.kilometers_per_hour
-              } kmph (${neoFeedData?.highestVelocityObj?.relative_velocity?.miles_per_hour} mph)`}
-            />
-          )}
-        </div>
+            {neoFeedData?.hazardousNeo > 0 && (
+              <Card
+                title={`${neoFeedData?.hazardousNeo}`}
+                subtitle={`Out of ${neoFeedData?.totalNeo}`}
+                description={`${neoFeedData?.hazardousNeo > 1 ? "were" : "was"} potentially hazardous to us`}
+              />
+            )}
+            {neoFeedData?.objClosestToEarth && (
+              <Card
+                title={`${neoFeedData?.objClosestToEarth?.name}  on ${convertEpochDateToMonthDateYearFormat(neoFeedData?.objClosestToEarth?.epoch_date_close_approach)}`}
+                subtitle="The object that was closest to us during this period was the"
+                description={`at a distance of ${neoFeedData?.objClosestToEarth?.miss_distance?.kilometers} km (${neoFeedData?.objClosestToEarth?.miss_distance?.miles} miles)`}
+              />
+            )}
+            {neoFeedData?.highestVelocityObj && (
+              <Card
+                title={`${neoFeedData?.highestVelocityObj?.name}`}
+                subtitle="The object with the highest velocity during this period"
+                description={`at a velocity of ${neoFeedData?.highestVelocityObj?.relative_velocity?.kilometers_per_hour} kmph (${neoFeedData?.highestVelocityObj?.relative_velocity?.miles_per_hour} mph)`}
+              />
+            )}
+          </div>
+        )}
       </section>
     </main>
   );

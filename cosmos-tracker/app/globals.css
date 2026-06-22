@@ -805,7 +805,9 @@ body > * {
 
 .cosmos-date-range-picker .react-calendar__tile:enabled:hover,
 .cosmos-date-range-picker .react-calendar__tile:enabled:focus,
-.cosmos-date-range-picker .react-calendar--selectRange .react-calendar__tile--hover {
+.cosmos-date-range-picker
+  .react-calendar--selectRange
+  .react-calendar__tile--hover {
   background: rgba(99, 102, 241, 0.1);
   color: #4338ca;
 }
@@ -833,9 +835,7 @@ body > * {
   color-scheme: dark;
 }
 
-[data-theme="dark"]
-  .cosmos-date-range-picker
-  .react-daterange-picker__wrapper {
+[data-theme="dark"] .cosmos-date-range-picker .react-daterange-picker__wrapper {
   border-color: #334155;
   background: #0f172a;
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset;
@@ -859,7 +859,9 @@ body > * {
 [data-theme="dark"]
   .cosmos-date-range-picker
   .react-daterange-picker__inputGroup__leadingZero,
-[data-theme="dark"] .cosmos-date-range-picker .react-daterange-picker__range-divider {
+[data-theme="dark"]
+  .cosmos-date-range-picker
+  .react-daterange-picker__range-divider {
   color: #94a3b8;
 }
 
@@ -930,8 +932,12 @@ body > * {
   color: #64748b;
 }
 
-[data-theme="dark"] .cosmos-date-range-picker .react-calendar__tile:enabled:hover,
-[data-theme="dark"] .cosmos-date-range-picker .react-calendar__tile:enabled:focus,
+[data-theme="dark"]
+  .cosmos-date-range-picker
+  .react-calendar__tile:enabled:hover,
+[data-theme="dark"]
+  .cosmos-date-range-picker
+  .react-calendar__tile:enabled:focus,
 [data-theme="dark"]
   .cosmos-date-range-picker
   .react-calendar--selectRange
