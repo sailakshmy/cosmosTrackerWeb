@@ -1,19 +1,14 @@
 "use client";
-import { useMemo, useState } from "react";
+
 import Card from "../components/Card";
-import { addDays } from "date-fns";
 import { NearEarthObject } from "../utilities/types";
-import {
-  convertEpochDateToMonthDateYearFormat,
-  fetchISOStringDate,
-  fetchNeoFeedData,
-} from "../utilities/helper";
+import { convertEpochDateToMonthDateYearFormat } from "../utilities/helper";
 import DateRangePickerComponent from "../components/DateRangePicker";
 import Tooltip from "../components/Tooltip";
-import { useQuery } from "@tanstack/react-query";
 import CardSkeleton from "../components/CardSkeleton";
+import useNeoFeedHook from "./hooks/useNeoFeedHook";
 
-interface NeoScreenProps {
+export interface NeoScreenProps {
   totalNeos: number;
   hazardousNeos: number;
   objectClosestToEarth: NearEarthObject;
@@ -26,55 +21,21 @@ const NeoScreen = ({
   objectClosestToEarth,
   highestVelocityObject,
 }: NeoScreenProps) => {
-  const [neoFeedData, setNeoFeedData] = useState({
-    totalNeo: totalNeos,
-    hazardousNeo: hazardousNeos,
-    objClosestToEarth: objectClosestToEarth,
-    highestVelocityObj: highestVelocityObject,
+  const {
+    startDate,
+    endDate,
+    rangeEndDate,
+    onDateRangeChange,
+    endDateGreaterThanExpectedRange,
+    isFetching,
+    isLoading,
+    neoFeedData,
+  } = useNeoFeedHook({
+    totalNeos,
+    hazardousNeos,
+    objectClosestToEarth,
+    highestVelocityObject,
   });
-
-  const [startDate, setStartDate] = useState(() => new Date());
-  const [endDate, setEndDate] = useState(() => addDays(new Date(), 7));
-  const [endDateGreaterThanExpectedRange, setEndDateGreaterThanExpectedRange] =
-    useState(false);
-
-  const rangeEndDate = useMemo(() => addDays(new Date(), 7), []);
-
-  const onDateRangeChange = (selectedDate: Date, selectedEndDate: Date) => {
-    setStartDate(selectedDate);
-    setEndDate(selectedEndDate);
-    setEndDateGreaterThanExpectedRange(
-      selectedEndDate > addDays(selectedDate, 7),
-    );
-  };
-
-  const fetchDataForSelectedDateRange = async (signal: AbortSignal) => {
-    const selStartDate = fetchISOStringDate(startDate);
-    const selEndDate = fetchISOStringDate(addDays(startDate, 7));
-    console.log("SelStartDate", selStartDate);
-    console.log("selEndDate", selEndDate);
-    const updatedNeoFeedDate = await fetchNeoFeedData(
-      selStartDate,
-      selEndDate,
-      signal,
-    );
-    setNeoFeedData({
-      totalNeo: updatedNeoFeedDate?.totalNeos,
-      hazardousNeo: updatedNeoFeedDate?.hazardousNeos,
-      objClosestToEarth: updatedNeoFeedDate?.objectClosestToEarth,
-      highestVelocityObj: updatedNeoFeedDate?.highestVelocityObject,
-    });
-    return updatedNeoFeedDate;
-  };
-
-  const { isLoading, isFetching } = useQuery({
-    // ✅ Stable string keys — Date objects are always new references
-    queryKey: [startDate.toISOString(), endDate.toISOString()],
-    queryFn: ({ signal }) => fetchDataForSelectedDateRange(signal),
-    retry: 3,
-    retryDelay: 100,
-  });
-
   return (
     <main className="relative flex min-h-[calc(100vh-64px)] w-full flex-1 items-start justify-center overflow-x-hidden bg-cosmos-night px-4 py-6 sm:px-6 lg:min-h-[calc(100vh-72px)] lg:px-8 lg:py-10">
       <section className="relative z-10 flex w-full max-w-6xl flex-col gap-6 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:gap-8 sm:rounded-2xl sm:p-6 lg:p-8 dark:border-slate-800 dark:bg-cosmos-panel">
