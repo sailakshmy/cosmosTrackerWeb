@@ -69,11 +69,16 @@ const NeoScreen = ({
               subtitle="A total of"
               description="Objects came close to Earth during this period"
             />
-            {neoFeedData?.hazardousNeo > 0 && (
+            {neoFeedData?.hazardousNeo > 0 ? (
               <Card
                 title={`${neoFeedData?.hazardousNeo}`}
                 subtitle={`Out of ${neoFeedData?.totalNeo}`}
                 description={`${neoFeedData?.hazardousNeo > 1 ? "were" : "was"} potentially hazardous to us`}
+              />
+            ) : (
+              <Card
+                title={`Thankfully, none of them were hazardous`}
+                subtitle={`Phew!`}
               />
             )}
             {neoFeedData?.objClosestToEarth && (
