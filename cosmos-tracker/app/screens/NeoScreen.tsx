@@ -38,7 +38,7 @@ const NeoScreen = ({
   const [endDateGreaterThanExpectedRange, setEndDateGreaterThanExpectedRange] =
     useState(false);
 
-  const rangeEndDate = useMemo(() => addDays(startDate, 7), [startDate]);
+  const rangeEndDate = useMemo(() => addDays(new Date(), 7), []);
 
   const onDateRangeChange = (selectedDate: Date, selectedEndDate: Date) => {
     setStartDate(selectedDate);
