@@ -1,6 +1,6 @@
 "use client";
 
-import { useId } from "react";
+import { useEffect, useId, useState } from "react";
 
 interface TooltipProps {
   message: string;
@@ -9,6 +9,15 @@ interface TooltipProps {
 
 const Tooltip = ({ message, ariaLabel = "More information" }: TooltipProps) => {
   const tooltipId = useId();
+  const [isInitiallyVisible, setIsInitiallyVisible] = useState(true);
+
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => {
+      setIsInitiallyVisible(false);
+    }, 10_000);
+
+    return () => window.clearTimeout(timeoutId);
+  }, []);
 
   return (
     <span className="group relative inline-flex align-middle">
@@ -35,7 +44,11 @@ const Tooltip = ({ message, ariaLabel = "More information" }: TooltipProps) => {
       <span
         id={tooltipId}
         role="tooltip"
-        className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 w-max max-w-64 -translate-x-1/2 rounded-md bg-slate-900 px-3 py-2 text-center text-xs font-medium leading-5 normal-case tracking-normal text-white opacity-100 shadow-lg dark:bg-slate-100 dark:text-slate-900"
+        className={`pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 w-max max-w-64 -translate-x-1/2 rounded-md bg-slate-900 px-3 py-2 text-center text-xs font-medium leading-5 normal-case tracking-normal text-white shadow-lg transition-opacity dark:bg-slate-100 dark:text-slate-900 ${
+          isInitiallyVisible
+            ? "opacity-100"
+            : "opacity-0 group-hover:opacity-100 group-focus-within:opacity-100"
+        }`}
       >
         {message}
         <span className="absolute left-1/2 top-full -translate-x-1/2 border-4 border-transparent border-t-slate-900 dark:border-t-slate-100" />
