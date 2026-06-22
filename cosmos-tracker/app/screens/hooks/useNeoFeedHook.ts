@@ -33,8 +33,10 @@ const useNeoFeedHook = ({
   };
 
   const fetchDataForSelectedDateRange = async (signal: AbortSignal) => {
-    const selStartDate = fetchISOStringDate(startDate);
-    const selEndDate = fetchISOStringDate(addDays(startDate, 7));
+    const selStartDate = fetchISOStringDate(addDays(startDate, 1));
+    const selEndDate = endDateGreaterThanExpectedRange
+      ? fetchISOStringDate(addDays(startDate, 8))
+      : fetchISOStringDate(endDate);
     console.log("SelStartDate", selStartDate);
     console.log("selEndDate", selEndDate);
     const updatedNeoFeedDate = await fetchNeoFeedData(
