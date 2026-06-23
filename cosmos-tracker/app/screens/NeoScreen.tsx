@@ -37,7 +37,7 @@ const NeoScreen = ({
     highestVelocityObject,
   });
   return (
-    <main className="relative flex min-h-[calc(100vh-64px)] w-full flex-1 items-start justify-center overflow-x-hidden bg-cosmos-night px-4 py-6 sm:px-6 lg:min-h-[calc(100vh-72px)] lg:px-8 lg:py-10">
+    <main className="relative flex min-h-[calc(100vh-64px)] w-full flex-1 items-start justify-center overflow-x-hidden px-4 py-6 sm:px-6 lg:min-h-[calc(100vh-72px)] lg:px-8 lg:py-10">
       <section className="relative z-10 flex w-full max-w-6xl flex-col gap-6 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:gap-8 sm:rounded-2xl sm:p-6 lg:p-8 dark:border-slate-800 dark:bg-cosmos-panel">
         <div className="flex flex-col gap-4">
           <div className="flex items-center justify-center gap-1.5">
