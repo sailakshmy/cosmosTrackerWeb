@@ -24,12 +24,10 @@ export interface NearEarthObject {
 }
 
 export interface Data {
-  id: number;
-  calories: number;
-  carbs: number;
-  fat: number;
+  date: string;
   name: string;
-  protein: number;
+  missDistance: string;
+  relativeVelocity: string;
 }
 
 export type Order = "asc" | "desc";

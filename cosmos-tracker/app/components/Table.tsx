@@ -34,29 +34,24 @@ const rows = [
 
 const headCells: readonly HeadCell[] = [
   {
+    id: "date",
+    numeric: false,
+    label: "Date",
+  },
+  {
     id: "name",
     numeric: false,
-    label: "Dessert (100g serving)",
+    label: "Object Name",
   },
   {
-    id: "calories",
+    id: "missDistance",
     numeric: true,
-    label: "Calories",
+    label: "Miss Distance",
   },
   {
-    id: "fat",
+    id: "relativeVelocity",
     numeric: true,
-    label: "Fat (g)",
-  },
-  {
-    id: "carbs",
-    numeric: true,
-    label: "Carbs (g)",
-  },
-  {
-    id: "protein",
-    numeric: true,
-    label: "Protein (g)",
+    label: "Relative Velocity",
   },
 ];
 
