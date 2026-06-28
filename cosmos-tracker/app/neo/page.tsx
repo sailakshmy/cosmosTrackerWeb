@@ -23,6 +23,7 @@ const NeoPage = async () => {
       hazardousNeos,
       objectClosestToEarth,
       highestVelocityObject,
+      nearEarthObjectList,
     } = neoData;
     return (
       <NeoScreen
@@ -30,6 +31,7 @@ const NeoPage = async () => {
         hazardousNeos={hazardousNeos}
         objectClosestToEarth={objectClosestToEarth}
         highestVelocityObject={highestVelocityObject}
+        nearEarthObjectList={nearEarthObjectList}
       />
     );
   }

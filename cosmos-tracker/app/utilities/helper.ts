@@ -34,25 +34,17 @@ export const convertEpochDateToMonthDateYearFormat = (
   epochDate: EpochTimeStamp,
 ) => {
   return new Date(epochDate)?.toUTCString();
-  // console.log(`"date", ${date?.toDateString()}, ${date?.toUTCString()}`);
-  // return date;
 };
 
-export function createData(
-  id: number,
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number,
-): Data {
+export function createData(object) {
+  console.log("object", object);
   return {
-    id,
-    name,
-    calories,
-    fat,
-    carbs,
-    protein,
+    date: object?.close_approach_data?.[0]?.close_approach_date,
+    id: object?.id,
+    name: object?.name,
+    missDistance: object?.close_approach_data?.[0]?.miss_distance?.kilometers,
+    relativeVelocity:
+      object?.close_approach_data?.[0]?.relative_velocity?.kilometers,
   };
 }
 
@@ -77,3 +69,16 @@ export function getComparator<Key extends keyof any>(
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
+
+export const fetchRowsFromTableData = (tableData) => {
+  const rows = [];
+  tableData.forEach((date) => {
+    Object?.keys(date)?.forEach((datekey) => {
+      const dateObj = date?.[datekey];
+      if (dateObj?.length) {
+        dateObj?.forEach((neo) => rows?.push(createData(neo)));
+      }
+    });
+  });
+  return rows;
+};

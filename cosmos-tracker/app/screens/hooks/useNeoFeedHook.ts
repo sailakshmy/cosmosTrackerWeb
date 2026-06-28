@@ -9,6 +9,7 @@ const useNeoFeedHook = ({
   hazardousNeos,
   objectClosestToEarth,
   highestVelocityObject,
+  nearEarthObjectList,
 }: NeoScreenProps) => {
   const [neoFeedData, setNeoFeedData] = useState({
     totalNeo: totalNeos,
@@ -16,6 +17,7 @@ const useNeoFeedHook = ({
     objClosestToEarth: objectClosestToEarth,
     highestVelocityObj: highestVelocityObject,
   });
+  const [sortedObjectList, setSortedObjectList] = useState(nearEarthObjectList);
 
   const [startDate, setStartDate] = useState(() => new Date());
   const [endDate, setEndDate] = useState(() => addDays(new Date(), 7));
@@ -33,7 +35,7 @@ const useNeoFeedHook = ({
   };
 
   const fetchDataForSelectedDateRange = async (signal: AbortSignal) => {
-    const selStartDate = fetchISOStringDate(addDays(startDate, 1));
+    const selStartDate = fetchISOStringDate(startDate);
     const selEndDate = endDateGreaterThanExpectedRange
       ? fetchISOStringDate(addDays(startDate, 8))
       : fetchISOStringDate(endDate);
@@ -50,6 +52,7 @@ const useNeoFeedHook = ({
       objClosestToEarth: updatedNeoFeedDate?.objectClosestToEarth,
       highestVelocityObj: updatedNeoFeedDate?.highestVelocityObject,
     });
+    setSortedObjectList(updatedNeoFeedDate?.nearEarthObjectList);
     return updatedNeoFeedDate;
   };
 
@@ -70,6 +73,7 @@ const useNeoFeedHook = ({
     endDateGreaterThanExpectedRange,
     isLoading,
     isFetching,
+    sortedObjectList,
   };
 };
 

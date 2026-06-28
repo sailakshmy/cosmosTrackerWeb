@@ -14,6 +14,7 @@ export interface NeoScreenProps {
   hazardousNeos: number;
   objectClosestToEarth: NearEarthObject;
   highestVelocityObject: NearEarthObject;
+  nearEarthObjectList: [];
 }
 
 const NeoScreen = ({
@@ -21,6 +22,7 @@ const NeoScreen = ({
   hazardousNeos,
   objectClosestToEarth,
   highestVelocityObject,
+  nearEarthObjectList,
 }: NeoScreenProps) => {
   const {
     startDate,
@@ -31,11 +33,13 @@ const NeoScreen = ({
     isFetching,
     isLoading,
     neoFeedData,
+    sortedObjectList,
   } = useNeoFeedHook({
     totalNeos,
     hazardousNeos,
     objectClosestToEarth,
     highestVelocityObject,
+    nearEarthObjectList,
   });
   return (
     <main className="relative flex min-h-[calc(100vh-64px)] w-full flex-1 items-start justify-center overflow-x-hidden px-4 py-6 sm:px-6 lg:min-h-[calc(100vh-72px)] lg:px-8 lg:py-10">
@@ -97,7 +101,7 @@ const NeoScreen = ({
               />
             )}
 
-            <EnhancedTable />
+            <EnhancedTable tableData={sortedObjectList} />
           </div>
         )}
       </section>

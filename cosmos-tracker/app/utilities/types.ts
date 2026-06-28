@@ -28,6 +28,7 @@ export interface Data {
   name: string;
   missDistance: string;
   relativeVelocity: string;
+  id: string;
 }
 
 export type Order = "asc" | "desc";
