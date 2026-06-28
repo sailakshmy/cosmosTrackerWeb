@@ -12,11 +12,6 @@ import TableSortLabel from "@mui/material/TableSortLabel";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
-import Checkbox from "@mui/material/Checkbox";
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
-import DeleteIcon from "@mui/icons-material/Delete";
-import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
 import { createData, getComparator } from "../utilities/helper";
 import { Data, HeadCell, Order } from "../utilities/types";
@@ -71,7 +66,6 @@ const headCells: readonly HeadCell[] = [
 ];
 
 interface EnhancedTableProps {
-  numSelected: number;
   onRequestSort: (
     event: React.MouseEvent<unknown>,
     property: keyof Data,
@@ -82,7 +76,7 @@ interface EnhancedTableProps {
 }
 
 function EnhancedTableHead(props: EnhancedTableProps) {
-  const { order, orderBy, numSelected, rowCount, onRequestSort } = props;
+  const { order, orderBy, onRequestSort } = props;
   const createSortHandler =
     (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
       onRequestSort(event, property);
@@ -138,40 +132,14 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
         },
       ]}
     >
-      {numSelected > 0 ? (
-        <Typography
-          variant="subtitle1"
-          component="div"
-          sx={{
-            color: "inherit",
-            flex: "1 1 100%",
-          }}
-        >
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <Typography
-          sx={{ flex: "1 1 100%" }}
-          variant="h6"
-          id="tableTitle"
-          component="div"
-        >
-          Approach Timeline
-        </Typography>
-      )}
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-      )}
+      <Typography
+        sx={{ flex: "1 1 100%" }}
+        variant="h6"
+        id="tableTitle"
+        component="div"
+      >
+        Approach Timeline
+      </Typography>
     </Toolbar>
   );
 }
@@ -245,10 +213,8 @@ export default function EnhancedTable() {
             stickyHeader
           >
             <EnhancedTableHead
-              numSelected={selected.length}
               order={order}
               orderBy={orderBy}
-              //   onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
               rowCount={rows.length}
             />
@@ -261,7 +227,7 @@ export default function EnhancedTable() {
                   <TableRow
                     hover
                     onClick={(event) => handleClick(event, row.id)}
-                    role="checkbox"
+                    role="menuitemradio"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
                     key={row.id}
@@ -269,13 +235,13 @@ export default function EnhancedTable() {
                     sx={{ cursor: "pointer" }}
                   >
                     <TableCell padding="checkbox">
-                      <Checkbox
+                      {/* <Checkbox
                         color="primary"
                         checked={isItemSelected}
                         slotProps={{
                           input: { "aria-labelledby": labelId },
                         }}
-                      />
+                      /> */}
                     </TableCell>
                     <TableCell
                       component="th"
