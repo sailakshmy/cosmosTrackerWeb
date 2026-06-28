@@ -35,7 +35,6 @@ export interface Data {
 export type Order = "asc" | "desc";
 
 export interface HeadCell {
-  disablePadding: boolean;
   id: keyof Data;
   label: string;
   numeric: boolean;

@@ -36,31 +36,26 @@ const headCells: readonly HeadCell[] = [
   {
     id: "name",
     numeric: false,
-    disablePadding: true,
     label: "Dessert (100g serving)",
   },
   {
     id: "calories",
     numeric: true,
-    disablePadding: false,
     label: "Calories",
   },
   {
     id: "fat",
     numeric: true,
-    disablePadding: false,
     label: "Fat (g)",
   },
   {
     id: "carbs",
     numeric: true,
-    disablePadding: false,
     label: "Carbs (g)",
   },
   {
     id: "protein",
     numeric: true,
-    disablePadding: false,
     label: "Protein (g)",
   },
 ];
@@ -85,12 +80,11 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox"></TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
             align={headCell.numeric ? "right" : "left"}
-            padding={headCell.disablePadding ? "none" : "normal"}
+            padding={"normal"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
@@ -111,24 +105,14 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     </TableHead>
   );
 }
-interface EnhancedTableToolbarProps {
-  numSelected: number;
-}
-function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-  const { numSelected } = props;
+
+function EnhancedTableToolbar() {
   return (
     <Toolbar
       sx={[
         {
           pl: { sm: 2 },
           pr: { xs: 1, sm: 1 },
-        },
-        numSelected > 0 && {
-          bgcolor: (theme) =>
-            alpha(
-              theme.palette.primary.main,
-              theme.palette.action.activatedOpacity,
-            ),
         },
       ]}
     >
@@ -146,7 +130,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
 export default function EnhancedTable() {
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof Data>("calories");
-  const [selected, setSelected] = React.useState<readonly number[]>([]);
+  const [selected, setSelected] = React.useState(0); //<readonly number[]>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -160,22 +144,7 @@ export default function EnhancedTable() {
   };
 
   const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected: readonly number[] = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-      );
-    }
-    setSelected(newSelected);
+    setSelected(id);
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -204,7 +173,7 @@ export default function EnhancedTable() {
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -220,7 +189,7 @@ export default function EnhancedTable() {
             />
             <TableBody>
               {visibleRows.map((row, index) => {
-                const isItemSelected = selected.includes(row.id);
+                const isItemSelected = selected === row.id;
                 const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
@@ -234,20 +203,11 @@ export default function EnhancedTable() {
                     selected={isItemSelected}
                     sx={{ cursor: "pointer" }}
                   >
-                    <TableCell padding="checkbox">
-                      {/* <Checkbox
-                        color="primary"
-                        checked={isItemSelected}
-                        slotProps={{
-                          input: { "aria-labelledby": labelId },
-                        }}
-                      /> */}
-                    </TableCell>
                     <TableCell
                       component="th"
                       id={labelId}
                       scope="row"
-                      padding="none"
+                      padding="normal"
                     >
                       {row.name}
                     </TableCell>
