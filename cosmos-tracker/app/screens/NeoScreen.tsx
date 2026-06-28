@@ -7,6 +7,7 @@ import DateRangePickerComponent from "../components/DateRangePicker";
 import Tooltip from "../components/Tooltip";
 import CardSkeleton from "../components/CardSkeleton";
 import useNeoFeedHook from "./hooks/useNeoFeedHook";
+import EnhancedTable from "../components/Table";
 
 export interface NeoScreenProps {
   totalNeos: number;
@@ -95,6 +96,8 @@ const NeoScreen = ({
                 description={`at a velocity of ${neoFeedData?.highestVelocityObj?.relative_velocity?.kilometers_per_hour} kmph (${neoFeedData?.highestVelocityObj?.relative_velocity?.miles_per_hour} mph)`}
               />
             )}
+
+            <EnhancedTable />
           </div>
         )}
       </section>
