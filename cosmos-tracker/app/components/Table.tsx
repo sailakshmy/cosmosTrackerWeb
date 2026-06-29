@@ -200,14 +200,17 @@ interface EnhancedTableDataProps {
 export default function EnhancedTable({ tableData }: EnhancedTableDataProps) {
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof Data>("date");
-  const [selected, setSelected] = React.useState<string | null>(null);
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const tableRows = React.useMemo(
     () => fetchRowsFromTableData(tableData),
     [tableData],
   );
-  // console.log("table Rows", tableRows);
+  console.log("table Rows", tableRows);
+  const [selected, setSelected] = React.useState<string | null>(
+    tableRows?.[0]?.id,
+  );
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
     property: keyof Data,
