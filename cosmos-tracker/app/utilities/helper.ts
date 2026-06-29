@@ -1,20 +1,4 @@
-import { Data, Order } from "./types";
-
-interface NeoTableObject {
-  close_approach_data?: Array<{
-    close_approach_date?: string;
-    miss_distance?: {
-      kilometers?: string;
-    };
-    relative_velocity?: {
-      kilometers_per_hour?: string;
-    };
-  }>;
-  id?: string;
-  name?: string;
-}
-
-export type NeoTableData = Array<Record<string, NeoTableObject[]>>;
+import { Data, NeoTableData, NeoTableObject, Order } from "./types";
 
 export const fetchISOStringDate = (date: Date) =>
   date?.toISOString()?.split("T")?.[0];
