@@ -34,12 +34,12 @@ const headCells: readonly HeadCell[] = [
   {
     id: "missDistance",
     numeric: true,
-    label: "Miss Distance",
+    label: "Miss Distance (km)",
   },
   {
     id: "relativeVelocity",
     numeric: true,
-    label: "Relative Velocity",
+    label: "Relative Velocity (kmph)",
   },
 ];
 
@@ -112,12 +112,12 @@ function EnhancedTableToolbar() {
 }
 export default function EnhancedTable({ tableData }) {
   const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState<keyof Data>("missDistance");
+  const [orderBy, setOrderBy] = React.useState<keyof Data>("date");
   const [selected, setSelected] = React.useState(0);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const tableRows = fetchRowsFromTableData(tableData);
-  console.log("table Rows", tableRows);
+  // console.log("table Rows", tableRows);
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
     property: keyof Data,

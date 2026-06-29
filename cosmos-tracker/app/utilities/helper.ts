@@ -37,14 +37,14 @@ export const convertEpochDateToMonthDateYearFormat = (
 };
 
 export function createData(object) {
-  console.log("object", object);
+  // console.log("object", object);
   return {
     date: object?.close_approach_data?.[0]?.close_approach_date,
     id: object?.id,
     name: object?.name,
     missDistance: object?.close_approach_data?.[0]?.miss_distance?.kilometers,
     relativeVelocity:
-      object?.close_approach_data?.[0]?.relative_velocity?.kilometers,
+      object?.close_approach_data?.[0]?.relative_velocity?.kilometers_per_hour,
   };
 }
 
