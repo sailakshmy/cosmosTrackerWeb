@@ -1,5 +1,21 @@
 import { Data, Order } from "./types";
 
+interface NeoTableObject {
+  close_approach_data?: Array<{
+    close_approach_date?: string;
+    miss_distance?: {
+      kilometers?: string;
+    };
+    relative_velocity?: {
+      kilometers_per_hour?: string;
+    };
+  }>;
+  id?: string;
+  name?: string;
+}
+
+export type NeoTableData = Array<Record<string, NeoTableObject[]>>;
+
 export const fetchISOStringDate = (date: Date) =>
   date?.toISOString()?.split("T")?.[0];
 
@@ -36,15 +52,17 @@ export const convertEpochDateToMonthDateYearFormat = (
   return new Date(epochDate)?.toUTCString();
 };
 
-export function createData(object) {
+export function createData(object: NeoTableObject): Data {
   // console.log("object", object);
   return {
-    date: object?.close_approach_data?.[0]?.close_approach_date,
-    id: object?.id,
-    name: object?.name,
-    missDistance: object?.close_approach_data?.[0]?.miss_distance?.kilometers,
+    date: object?.close_approach_data?.[0]?.close_approach_date ?? "",
+    id: object?.id ?? "",
+    name: object?.name ?? "",
+    missDistance:
+      object?.close_approach_data?.[0]?.miss_distance?.kilometers ?? "",
     relativeVelocity:
-      object?.close_approach_data?.[0]?.relative_velocity?.kilometers_per_hour,
+      object?.close_approach_data?.[0]?.relative_velocity
+        ?.kilometers_per_hour ?? "",
   };
 }
 
@@ -58,7 +76,7 @@ function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   return 0;
 }
 
-export function getComparator<Key extends keyof any>(
+export function getComparator<Key extends PropertyKey>(
   order: Order,
   orderBy: Key,
 ): (
@@ -70,8 +88,8 @@ export function getComparator<Key extends keyof any>(
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-export const fetchRowsFromTableData = (tableData) => {
-  const rows = [];
+export const fetchRowsFromTableData = (tableData: NeoTableData): Data[] => {
+  const rows: Data[] = [];
   tableData.forEach((date) => {
     Object?.keys(date)?.forEach((datekey) => {
       const dateObj = date?.[datekey];

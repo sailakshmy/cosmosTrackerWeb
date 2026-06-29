@@ -12,8 +12,43 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import { visuallyHidden } from "@mui/utils";
-import { fetchRowsFromTableData, getComparator } from "../utilities/helper";
+import {
+  fetchRowsFromTableData,
+  getComparator,
+  type NeoTableData,
+} from "../utilities/helper";
 import { Data, HeadCell, Order } from "../utilities/types";
+
+const tableShellStyles = {
+  width: "100%",
+  gridColumn: "1 / -1",
+};
+
+const paperStyles = {
+  width: "100%",
+  overflow: "hidden",
+  border: "1px solid #e2e8f0",
+  borderRadius: { xs: "12px", sm: "16px" },
+  bgcolor: "#ffffff",
+  boxShadow: "0 1px 2px rgba(15, 23, 42, 0.05)",
+  color: "#111827",
+  transition: "background-color 180ms ease, border-color 180ms ease",
+  "[data-theme='dark'] &": {
+    borderColor: "#1e293b",
+    bgcolor: "#111827",
+    color: "#f8fafc",
+    boxShadow: "0 1px 0 rgba(255, 255, 255, 0.04) inset",
+  },
+};
+
+const tableContainerStyles = {
+  maxHeight: { xs: 460, md: 560 },
+  borderTop: "1px solid #e2e8f0",
+  borderBottom: "1px solid #e2e8f0",
+  "[data-theme='dark'] &": {
+    borderColor: "#1e293b",
+  },
+};
 
 const headCells: readonly HeadCell[] = [
   {
@@ -61,7 +96,47 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     };
 
   return (
-    <TableHead>
+    <TableHead
+      sx={{
+        "& .MuiTableCell-head": {
+          borderBottom: "1px solid #cbd5e1",
+          bgcolor: "#f8fafc",
+          color: "#475569",
+          fontSize: "0.75rem",
+          fontWeight: 800,
+          letterSpacing: 0,
+          lineHeight: 1.4,
+          textTransform: "uppercase",
+          whiteSpace: "nowrap",
+        },
+        "& .MuiTableSortLabel-root": {
+          color: "#475569",
+          transition: "color 180ms ease",
+        },
+        "& .MuiTableSortLabel-root:hover, & .MuiTableSortLabel-root.Mui-active":
+          {
+            color: "#6366f1",
+          },
+        "& .MuiTableSortLabel-icon": {
+          color: "#6366f1 !important",
+        },
+        "[data-theme='dark'] & .MuiTableCell-head": {
+          borderBottomColor: "#334155",
+          bgcolor: "#0f172a",
+          color: "#cbd5e1",
+        },
+        "[data-theme='dark'] & .MuiTableSortLabel-root": {
+          color: "#cbd5e1",
+        },
+        "[data-theme='dark'] & .MuiTableSortLabel-root:hover, [data-theme='dark'] & .MuiTableSortLabel-root.Mui-active":
+          {
+            color: "#2dd4bf",
+          },
+        "[data-theme='dark'] & .MuiTableSortLabel-icon": {
+          color: "#2dd4bf !important",
+        },
+      }}
+    >
       <TableRow>
         {headCells.map((headCell) => (
           <TableCell
@@ -92,16 +167,24 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 function EnhancedTableToolbar() {
   return (
     <Toolbar
-      sx={[
-        {
-          pl: { sm: 2 },
-          pr: { xs: 1, sm: 1 },
-        },
-      ]}
+      sx={{
+        minHeight: { xs: 60, sm: 68 },
+        px: { xs: 2, sm: 3 },
+      }}
     >
       <Typography
-        sx={{ flex: "1 1 100%" }}
-        variant="h6"
+        sx={{
+          flex: "1 1 100%",
+          color: "#111827",
+          fontSize: { xs: "1rem", sm: "1.125rem" },
+          fontWeight: 800,
+          letterSpacing: 0,
+          lineHeight: 1.4,
+          "[data-theme='dark'] &": {
+            color: "#f8fafc",
+          },
+        }}
+        variant="h2"
         id="tableTitle"
         component="div"
       >
@@ -110,13 +193,20 @@ function EnhancedTableToolbar() {
     </Toolbar>
   );
 }
-export default function EnhancedTable({ tableData }) {
+interface EnhancedTableDataProps {
+  tableData: NeoTableData;
+}
+
+export default function EnhancedTable({ tableData }: EnhancedTableDataProps) {
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof Data>("date");
-  const [selected, setSelected] = React.useState(0);
+  const [selected, setSelected] = React.useState<string | null>(null);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const tableRows = fetchRowsFromTableData(tableData);
+  const tableRows = React.useMemo(
+    () => fetchRowsFromTableData(tableData),
+    [tableData],
+  );
   // console.log("table Rows", tableRows);
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -127,7 +217,7 @@ export default function EnhancedTable({ tableData }) {
     setOrderBy(property);
   };
 
-  const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
+  const handleClick = (event: React.MouseEvent<unknown>, id: string) => {
     setSelected(id);
   };
 
@@ -151,16 +241,55 @@ export default function EnhancedTable({ tableData }) {
       [...tableRows]
         .sort(getComparator(order, orderBy))
         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
-    [order, orderBy, page, rowsPerPage],
+    [order, orderBy, page, rowsPerPage, tableRows],
   );
 
   return (
-    <Box sx={{ width: "100%" }}>
-      <Paper sx={{ width: "100%", mb: 2 }}>
+    <Box sx={tableShellStyles}>
+      <Paper sx={paperStyles} elevation={0}>
         <EnhancedTableToolbar />
-        <TableContainer>
+        <TableContainer sx={tableContainerStyles}>
           <Table
-            sx={{ minWidth: 750 }}
+            sx={{
+              minWidth: 760,
+              "& .MuiTableCell-root": {
+                borderBottomColor: "#e2e8f0",
+                color: "#334155",
+                fontFamily: "inherit",
+                fontSize: "0.875rem",
+                letterSpacing: 0,
+                lineHeight: 1.5,
+                py: 1.75,
+              },
+              "& .MuiTableCell-body:first-of-type": {
+                color: "#111827",
+                fontWeight: 700,
+              },
+              "& .MuiTableRow-root": {
+                transition: "background-color 180ms ease",
+              },
+              "& .MuiTableRow-root:hover": {
+                bgcolor: "rgba(99, 102, 241, 0.08)",
+              },
+              "& .MuiTableRow-root.Mui-selected, & .MuiTableRow-root.Mui-selected:hover":
+                {
+                  bgcolor: "rgba(99, 102, 241, 0.13)",
+                },
+              "[data-theme='dark'] & .MuiTableCell-root": {
+                borderBottomColor: "#1e293b",
+                color: "#cbd5e1",
+              },
+              "[data-theme='dark'] & .MuiTableCell-body:first-of-type": {
+                color: "#f8fafc",
+              },
+              "[data-theme='dark'] & .MuiTableRow-root:hover": {
+                bgcolor: "rgba(45, 212, 191, 0.08)",
+              },
+              "[data-theme='dark'] & .MuiTableRow-root.Mui-selected, [data-theme='dark'] & .MuiTableRow-root.Mui-selected:hover":
+                {
+                  bgcolor: "rgba(45, 212, 191, 0.13)",
+                },
+            }}
             aria-labelledby="tableTitle"
             size={"medium"}
             stickyHeader
@@ -215,6 +344,38 @@ export default function EnhancedTable({ tableData }) {
           </Table>
         </TableContainer>
         <TablePagination
+          sx={{
+            color: "#475569",
+            fontFamily: "inherit",
+            "& .MuiTablePagination-selectLabel, & .MuiTablePagination-displayedRows":
+              {
+                fontSize: "0.875rem",
+                letterSpacing: 0,
+                m: 0,
+              },
+            "& .MuiTablePagination-select, & .MuiSvgIcon-root": {
+              color: "#111827",
+            },
+            "& .MuiIconButton-root": {
+              color: "#6366f1",
+            },
+            "& .MuiIconButton-root.Mui-disabled": {
+              color: "#94a3b8",
+            },
+            "[data-theme='dark'] &": {
+              color: "#cbd5e1",
+            },
+            "[data-theme='dark'] & .MuiTablePagination-select, [data-theme='dark'] & .MuiSvgIcon-root":
+              {
+                color: "#f8fafc",
+              },
+            "[data-theme='dark'] & .MuiIconButton-root": {
+              color: "#2dd4bf",
+            },
+            "[data-theme='dark'] & .MuiIconButton-root.Mui-disabled": {
+              color: "#475569",
+            },
+          }}
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
           count={tableRows.length}
