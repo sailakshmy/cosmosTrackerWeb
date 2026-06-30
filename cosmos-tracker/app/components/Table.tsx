@@ -12,12 +12,8 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import { visuallyHidden } from "@mui/utils";
-import {
-  fetchRowsFromTableData,
-  getComparator,
-  type NeoTableData,
-} from "../utilities/helper";
-import { Data, HeadCell, Order } from "../utilities/types";
+import { fetchRowsFromTableData, getComparator } from "../utilities/helper";
+import { Data, HeadCell, NeoTableData, Order } from "../utilities/types";
 
 const tableShellStyles = {
   width: "100%",
@@ -66,6 +62,12 @@ const headCells: readonly HeadCell[] = [
     numeric: false,
     label: "Object Name",
   },
+  {
+    id: "isHazardous",
+    numeric: false,
+    label: "Hazardous",
+  },
+
   {
     id: "missDistance",
     numeric: true,
@@ -307,7 +309,7 @@ export default function EnhancedTable({ tableData }: EnhancedTableDataProps) {
               {visibleRows.map((row, index) => {
                 const isItemSelected = selected === row.id;
                 const labelId = `enhanced-table-checkbox-${index}`;
-
+                console.log("row", row);
                 return (
                   <TableRow
                     hover
@@ -327,8 +329,9 @@ export default function EnhancedTable({ tableData }: EnhancedTableDataProps) {
                     >
                       {row.date}
                     </TableCell>
-                    <TableCell align="right">{row.id}</TableCell>
-                    <TableCell align="right">{row.name}</TableCell>
+                    <TableCell align="left">{row.id}</TableCell>
+                    <TableCell align="left">{row.name}</TableCell>
+                    <TableCell align="left">{row.isHazardous}</TableCell>
                     <TableCell align="right">{row.missDistance}</TableCell>
                     <TableCell align="right">{row.relativeVelocity}</TableCell>
                   </TableRow>

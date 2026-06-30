@@ -42,6 +42,7 @@ export function createData(object: NeoTableObject): Data {
     date: object?.close_approach_data?.[0]?.close_approach_date ?? "",
     id: object?.id ?? "",
     name: object?.name ?? "",
+    isHazardous: object?.is_potentially_hazardous_asteroid ? "Yes" : "No",
     missDistance:
       object?.close_approach_data?.[0]?.miss_distance?.kilometers ?? "",
     relativeVelocity:

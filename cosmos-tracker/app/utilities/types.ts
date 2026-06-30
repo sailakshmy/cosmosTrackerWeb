@@ -29,6 +29,7 @@ export interface Data {
   missDistance: string;
   relativeVelocity: string;
   id: string;
+  isHazardous: string;
 }
 
 export type Order = "asc" | "desc";
@@ -51,6 +52,7 @@ export interface NeoTableObject {
   }>;
   id?: string;
   name?: string;
+  is_potentially_hazardous_asteroid?: boolean;
 }
 
 export type NeoTableData = Array<Record<string, NeoTableObject[]>>;
